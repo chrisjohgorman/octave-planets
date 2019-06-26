@@ -1,4 +1,4 @@
-function [latitude, longitude, r] = mars(day_number)
+function [right_ascension, declination, distance, azimuth, altitude] = mars(day_number, latitude, longitude)
     	N =  49.5574 + 2.11081e-5   * day_number;
     	i =   1.8497 - 1.78e-8      * day_number;
     	w = 286.5016 + 2.92961e-5   * day_number;
@@ -28,13 +28,26 @@ function [latitude, longitude, r] = mars(day_number)
         xequat = xgeoc;
         yequat = ygeoc * cosd(oblecl) - zgeoc * sind(oblecl);
         zequat = ygeoc * sind(oblecl) + zgeoc * cosd(oblecl);
-        % convert to RA and Decl
-        RA = atan2d(yequat, xequat);
-        RA = revolve_degree(RA)';
-	RA = RA / 15;
-        Decl = atan2d(zequat, sqrt(xequat*xequat + yequat*yequat));
+        % convert to right_ascension and declination
+        right_ascension = atan2d(yequat, xequat);
+        right_ascension = revolve_degree(right_ascension)';
+	right_ascension = right_ascension / 15;
+        declination = atan2d(zequat, sqrt(xequat*xequat + yequat*yequat));
+	distance = sqrt(xequat^2+yequat^2+zequat^2);
         % convert to ecliptic longitude and latitude
-        longitude = atan2d(yeclip, xeclip);
-        longitude = revolve_degree(longitude);
-        latitude = atan2d(zeclip, sqrt(xeclip*xeclip + yeclip*yeclip));
+        lon = atan2d(yeclip, xeclip);
+        lon = revolve_degree(longitude);
+        lat = atan2d(zeclip, sqrt(xeclip*xeclip + yeclip*yeclip));
+        % convert to azimuth and altitude
+        hour_angle = sidtime(day_number, longitude) - right_ascension;
+        hour_angle = revolve_hour_angle(hour_angle);
+        hour_angle = hour_angle * 15;
+        x = cosd(hour_angle)*cosd(declination);
+        y = sind(hour_angle)*cosd(declination);
+        z = sind(declination);
+        x_horizon = x * sind(latitude) - z * cosd(latitude);
+        y_horizon = y;
+        z_horizon = x * cosd(latitude) + z * sind(latitude);
+        azimuth = atan2d(y_horizon,x_horizon) + 180;
+        altitude = atan2d(z_horizon, sqrt(x_horizon^2 + y_horizon^2));
 end

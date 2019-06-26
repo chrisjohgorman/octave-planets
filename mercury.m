@@ -32,7 +32,7 @@ function [right_ascension, declination, distance, azimuth, altitude] = mercury(d
 	right_ascension = atan2d(yequat, xequat);
 	right_ascension = revolve_degree(right_ascension);
 	right_ascension = right_ascension/15;
-	declination = atan2d(zequat, sqrt(xequat*xequat + yequat*yequat));
+	declination = atan2d(zequat, sqrt(xequat^2 + yequat^2));
 	distance = sqrt(xequat^2+yequat^2+zequat^2);
         % convert to ecliptic longitude and latitude
         lon = atan2d(yeclip, xeclip);
