@@ -16,8 +16,8 @@ function [moonrise, moonset] = moonrise_set (year, month, day, hour, latitude, l
 	
 	time = localtime(time);
 	
-	mr = UT_Moon_in_south - LHA
-	ms = UT_Moon_in_south + LHA
+	mr = UT_Moon_in_south - LHA;
+	ms = UT_Moon_in_south + LHA;
 	%mr = UT_Moon_in_south - LHA + time.gmtoff/3600;
 	%ms = UT_Moon_in_south + LHA + time.gmtoff/3600;
 	moonrise = mr;
