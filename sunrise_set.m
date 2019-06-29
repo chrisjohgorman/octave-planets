@@ -25,11 +25,9 @@ function [sunrise, sunset] = sunrise_set (year, month, day, latitude, longitude)
 		error("Sun is always above our altitude limit.");
 	end
 	LHA = acosd(cos_lha)/15;
-	
 	time = localtime(time);
-	
 	sr = UT_Sun_in_south - LHA + time.gmtoff/3600;
-	ss = UT_Sun_in_south + LHA + time.gmtoff/3600;
-	sunrise = datestr(sr/24, 'HH:MM:SS');
-	sunset = datestr(ss/24, 'HH:MM:SS');
+       	ss = UT_Sun_in_south + LHA + time.gmtoff/3600;
+       	sunrise = datestr(sr/24, 'HH:MM:SS');
+       	sunset = datestr(ss/24, 'HH:MM:SS');
 end
