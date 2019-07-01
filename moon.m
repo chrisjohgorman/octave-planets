@@ -1,4 +1,4 @@
-function [topocentric_right_ascension, topocentric_declination, distance, azimuth, altitude] =  moon(day_number, latitude, longitude)
+function [topocentric_right_ascension, topocentric_declination, distance, azimuth, altitude] =  moon(day_number, latitude, longitude, UT)
 	N = 125.1228 - 0.0529538083 * day_number;  % long asc. node
 	i = 5.1454;				   % inclination
 	w = 318.0634 + 0.1643573223 * day_number;  % Arg. of perigree
@@ -66,7 +66,7 @@ function [topocentric_right_ascension, topocentric_declination, distance, azimut
 	right_ascension = right_ascension / 15;
 	right_ascension = revolve_hour_angle(right_ascension);
 	declination = atan2d(z2, sqrt(x2*x2 + y2*y2));
-	hour_angle = (sidtime(day_number, longitude) - right_ascension) * 15;
+	hour_angle = (sidtime(day_number, longitude, UT) - right_ascension) * 15;
 	hour_angle = revolve_degree(hour_angle);
 	x = cosd(hour_angle) * cosd(declination);
 	y = sind(hour_angle) * cosd(declination);
