@@ -1,4 +1,4 @@
-function [right_ascension, declination, distance, azimuth, altitude] = mercury(day_number, latitude, longitude)
+function [right_ascension, declination, distance, azimuth, altitude] = mercury(day_number, latitude, longitude, UT)
 	N =  48.3313 + 3.24587e-5   * day_number;   % (Long of asc. node)
 	i =   7.0047 + 5.00e-8      * day_number;   % (Inclination)
 	w =  29.1241 + 1.01444e-5   * day_number;   % (Argument of perihelion)
@@ -39,7 +39,7 @@ function [right_ascension, declination, distance, azimuth, altitude] = mercury(d
         lon = revolve_degree(lon);
         lat = atan2d(zeclip, sqrt(xeclip*xeclip + yeclip*yeclip));
 	% convert to azimuth and altitude
-	hour_angle = sidtime(day_number, longitude) - right_ascension;
+	hour_angle = sidtime(day_number, longitude, UT) - right_ascension;
 	hour_angle = revolve_hour_angle(hour_angle);
 	hour_angle = hour_angle * 15;
 	x = cosd(hour_angle)*cosd(declination);
