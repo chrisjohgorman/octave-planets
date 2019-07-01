@@ -28,6 +28,6 @@ function [sunrise, sunset] = sunrise_set (year, month, day, latitude, longitude)
 	time = localtime(time);
 	sr = UT_Sun_in_south - LHA + time.gmtoff/3600;
        	ss = UT_Sun_in_south + LHA + time.gmtoff/3600;
-       	sunrise = datestr(sr/24, 'HH:MM:SS');
-       	sunset = datestr(ss/24, 'HH:MM:SS');
+       	sunrise = datestr(sr/24, 'HH:MM');
+       	sunset = datestr(ss/24, 'HH:MM');
 end
