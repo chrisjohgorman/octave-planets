@@ -1,4 +1,4 @@
-function [right_ascension, declination, distance, azimuth, altitude] = mars(day_number, latitude, longitude)
+function [right_ascension, declination, distance, azimuth, altitude] = mars(day_number, latitude, longitude, UT)
     	N =  49.5574 + 2.11081e-5   * day_number;
     	i =   1.8497 - 1.78e-8      * day_number;
     	w = 286.5016 + 2.92961e-5   * day_number;
@@ -39,7 +39,7 @@ function [right_ascension, declination, distance, azimuth, altitude] = mars(day_
         lon = revolve_degree(longitude);
         lat = atan2d(zeclip, sqrt(xeclip*xeclip + yeclip*yeclip));
         % convert to azimuth and altitude
-        hour_angle = sidtime(day_number, longitude) - right_ascension;
+        hour_angle = sidtime(day_number, longitude, UT) - right_ascension;
         hour_angle = revolve_hour_angle(hour_angle);
         hour_angle = hour_angle * 15;
         x = cosd(hour_angle)*cosd(declination);

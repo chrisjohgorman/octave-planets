@@ -1,4 +1,4 @@
-function [right_ascension, declination, distance, azimuth, altitude] = venus(day_number, latitude, longitude)
+function [right_ascension, declination, distance, azimuth, altitude] = venus(day_number, latitude, longitude, UT)
 	N =  76.6799 + 2.46590e-5   * day_number;
 	i =   3.3946 + 2.75e-8      * day_number;
 	w =  54.8910 + 1.38374e-5   * day_number;
@@ -40,7 +40,7 @@ function [right_ascension, declination, distance, azimuth, altitude] = venus(day
         lon = revolve_degree(lon);
         lat = atan2d(zeclip, sqrt(xeclip^2 + yeclip^2));
         % convert to azimuth and altitude
-        hour_angle = sidtime(day_number, longitude) - right_ascension;
+        hour_angle = sidtime(day_number, longitude, UT) - right_ascension;
         hour_angle = revolve_hour_angle(hour_angle);
         hour_angle = hour_angle * 15;
         x = cosd(hour_angle)*cosd(declination);
