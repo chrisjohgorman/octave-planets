@@ -9,9 +9,9 @@ function [moonrise, moonset] = mriset (year, month, day, hour, latitude, longitu
 	UT_Planet_in_south = revolve_hour_angle(UT_Planet_in_south);
 	cos_lha = (sind(-mpar) - sind(latitude)*sind(Decl))/(cosd(latitude) * cosd(Decl));
 	if (cos_lha > 1)
-		error("Mercury is always below our altitude limit.");
+		error("Moon is always below our altitude limit.");
 	elseif (cos_lha < -1)
-		error("Mercury is always above our altitude limit.");
+		error("Moon is always above our altitude limit.");
 	end
 	LHA = acosd(cos_lha)/15.04107;
 	
