@@ -33,7 +33,6 @@ function [right_ascension, declination, distance, azimuth, altitude] = venus(day
     right_ascension = revolve_degree(right_ascension);
     right_ascension = right_ascension/15;
     declination = atan2d(zequat, sqrt(xequat^2 + yequat^2));
-    %declination = 22 + 48/60 + 32/3600;
     distance = sqrt(xequat^2+yequat^2+zequat^2);
     % convert to ecliptic longitude and latitude
     lon = atan2d(yeclip, xeclip);

@@ -30,7 +30,7 @@ function [right_ascension, declination, distance, azimuth, altitude] = mars(day_
     zequat = ygeoc * sind(oblecl) + zgeoc * cosd(oblecl);
     % convert to right_ascension and declination
     right_ascension = atan2d(yequat, xequat);
-    right_ascension = revolve_degree(right_ascension)';
+    right_ascension = revolve_degree(right_ascension);
     right_ascension = right_ascension / 15;
     declination = atan2d(zequat, sqrt(xequat*xequat + yequat*yequat));
     distance = sqrt(xequat^2+yequat^2+zequat^2);

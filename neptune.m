@@ -6,7 +6,7 @@ function [right_ascension, declination, distance, azimuth, altitude] = neptune(d
     e = 0.008606 + 2.15E-9      * day_number;
     M = 260.2471 + 0.005995147  * day_number;
     M = revolve_degree(M);
-        oblecl = 23.4393 - 3.563e-7 * day_number; % obliquity of the eliptic
+    oblecl = 23.4393 - 3.563e-7 * day_number; % obliquity of the eliptic
     
     E = eccentric_anomaly(M, e, 0.0005);
     % neptune's rectrangular coordinates
