@@ -1,4 +1,4 @@
-function [mercuryrise, mercuryset] = mercriseset (year, month, day, hour, latitude, longitude)
+function [mercuryrise, mercuryset] = mercriset (year, month, day, hour, latitude, longitude)
 %
 %First we must decide which altitude we're interested in:
 %

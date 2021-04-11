@@ -28,13 +28,13 @@ function [venusrise, venusset] = venusrise_set (year, month, day, hour, latitude
     time = localtime(time);
     venusrise = UT_Planet_in_south - LHA;
     for i=1:5
-        [venusrise] = mercriset(year,month,day,venusrise,latitude,longitude);
+        [venusrise] = vriset(year,month,day,venusrise,latitude,longitude);
     end
     venusrise = venusrise + time.gmtoff/3600;
     venusrise = datestr((venusrise/24), 'HH:MM');
     venusset = UT_Planet_in_south + LHA;
     for i=1:5
-        [mrise, venusset] = mercriset(year,month,day,venusset,latitude,longitude);
+        [mrise, venusset] = vriset(year,month,day,venusset,latitude,longitude);
     end
     venusset = venusset + time.gmtoff/3600;
     venusset = datestr((venusset/24), 'HH:MM');

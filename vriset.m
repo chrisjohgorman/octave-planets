@@ -1,4 +1,4 @@
-function [venusrise, venusset] = vriseset (year, month, day, hour, latitude, longitude)
+function [venusrise, venusset] = vriset (year, month, day, hour, latitude, longitude)
 %
 %First we must decide which altitude we're interested in:
 %
