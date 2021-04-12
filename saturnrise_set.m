@@ -14,8 +14,8 @@ function [saturnrise, saturnset] = saturnrise_set (year, month, day, latitude, l
     end
     LHA = acosd(cos_lha)/15.04107;
     time = localtime(time);
-    jr = UT_Planet_in_south - LHA + time.gmtoff/3600;
-    js = UT_Planet_in_south + LHA + time.gmtoff/3600;
-    saturnrise = datestr(jr/24, 'HH:MM');
-    saturnset = datestr(js/24, 'HH:MM');
+    sr = UT_Planet_in_south - LHA + time.gmtoff/3600;
+    ss = UT_Planet_in_south + LHA + time.gmtoff/3600;
+    saturnrise = datestr(sr/24, 'HH:MM');
+    saturnset = datestr(ss/24, 'HH:MM');
 end
