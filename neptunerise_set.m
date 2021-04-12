@@ -1,6 +1,6 @@
-function [neptunerise, neptuneset] = neptunerise_set (year, month, day, hour, latitude, longitude)
+function [neptunerise, neptuneset] = neptunerise_set (year, month, day, latitude, longitude)
     h = -0.833;
-    d = day_number(year, month, day, hour);
+    d = day_number(year, month, day);
     [x1, y1, z1, oblecl, L] = sun_rectangular(d);
     [RA, Decl, r, az, alt] = neptune(d, latitude, longitude);
     GMST0 = (L + 180) / 15;
@@ -14,8 +14,8 @@ function [neptunerise, neptuneset] = neptunerise_set (year, month, day, hour, la
     end
     LHA = acosd(cos_lha)/15.04107;
     time = localtime(time);
-    jr = UT_Planet_in_south - LHA + time.gmtoff/3600;
-    js = UT_Planet_in_south + LHA + time.gmtoff/3600;
-    neptunerise = datestr(jr/24, 'HH:MM');
-    neptuneset = datestr(js/24, 'HH:MM');
+    nr = UT_Planet_in_south - LHA + time.gmtoff/3600;
+    ns = UT_Planet_in_south + LHA + time.gmtoff/3600;
+    neptunerise = datestr(nr/24, 'HH:MM');
+    neptuneset = datestr(ns/24, 'HH:MM');
 end
