@@ -1,4 +1,4 @@
-function [right_ascension, declination, distance, azimuth, altitude] = neptune(day_number, latitude, longitude)
+function [right_ascension, declination, distance, azimuth, altitude] = neptune(day_number, latitude, longitude, UT)
     N = 131.7806 + 3.0173E-5    * day_number;
     i =   1.7700 - 2.55E-7      * day_number;
     w = 272.8461 - 6.027E-6     * day_number;
@@ -39,7 +39,7 @@ function [right_ascension, declination, distance, azimuth, altitude] = neptune(d
     lon = revolve_degree(lon);
     lat = atan2d(zeclip, sqrt(xeclip*xeclip + yeclip*yeclip));
     % convert to azimuth and altitude
-    hour_angle = sidtime(day_number, longitude, 0) - right_ascension;
+    hour_angle = sidtime(day_number, longitude, UT) - right_ascension;
     hour_angle = revolve_hour_angle(hour_angle);
     hour_angle = hour_angle * 15;
     x = cosd(hour_angle)*cosd(declination);

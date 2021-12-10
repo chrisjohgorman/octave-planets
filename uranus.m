@@ -1,4 +1,4 @@
-function [right_ascension, declination, distance, azimuth, altitude] = uranus(day_number, latitude, longitude)
+function [right_ascension, declination, distance, azimuth, altitude] = uranus(day_number, latitude, longitude, UT)
     N =  74.0005 + 1.3978E-5    * day_number;  % Long of asc. node
     i =   0.7733 + 1.9E-8       * day_number;  % Inclination
     w =  96.6612 + 3.0565E-5    * day_number;  % Argument of perihelion
@@ -25,7 +25,7 @@ function [right_ascension, declination, distance, azimuth, altitude] = uranus(da
     yeclip = r * ( sind(N) * cosd(v+w) + cosd(N) * sind(v+w) * cosd(i));
     zeclip = r * sind(v+w) * sind(i);
     % add sun's rectangular coordinates
-    [x1, y1, z1, sunoblecl, L] = sun_rectangular(day_number);
+    [x1, y1, z1, sunoblecl, L, lonsun, rs] = sun_rectangular(day_number);
     xgeoc = x1 + xeclip;
     ygeoc = y1 + yeclip;
     zgeoc = z1 + zeclip;
@@ -49,7 +49,7 @@ function [right_ascension, declination, distance, azimuth, altitude] = uranus(da
     lon = perturbations_in_longitude + lon;
     lon = revolve_degree(lon);
     % convert to azimuth and altitude
-    hour_angle = sidtime(day_number, longitude, 0) - right_ascension;
+    hour_angle = sidtime(day_number, longitude, UT) - right_ascension;
     hour_angle = revolve_hour_angle(hour_angle);
     hour_angle = hour_angle * 15;
     x = cosd(hour_angle)*cosd(declination);

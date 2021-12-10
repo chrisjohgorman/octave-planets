@@ -1,4 +1,4 @@
-function [right_ascension, declination, distance, azimuth, altitude] = saturn(day_number, latitude, longitude)
+function [right_ascension, declination, distance, azimuth, altitude] = saturn(day_number, latitude, longitude, UT)
     N = 113.6634 + 2.38980E-5   * day_number; % Long of asc. node
     i =   2.4886 - 1.081E-7     * day_number; % Inclination
     w = 339.3939 + 2.97661E-5   * day_number; % Argument of perihelion
@@ -55,7 +55,7 @@ function [right_ascension, declination, distance, azimuth, altitude] = saturn(da
     lat = lat + perturbations_in_latitude;
     lat = revolve_degree(lat);
     % convert to azimuth and altitude
-    hour_angle = sidtime(day_number, longitude, 0) - right_ascension;
+    hour_angle = sidtime(day_number, longitude, UT) - right_ascension;
     hour_angle = revolve_hour_angle(hour_angle);
     hour_angle = hour_angle * 15;
     x = cosd(hour_angle)*cosd(declination);
