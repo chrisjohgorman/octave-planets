@@ -20,7 +20,7 @@ function [right_ascension, declination, distance, azimuth, altitude] = venus(day
     yeclip = r * ( sind(N) * cosd(v+w) + cosd(N) * sind(v+w) * cosd(i));
     zeclip = r * sind(v+w) * sind(i);
     % add sun's rectangular coordinates
-    [x1, y1, z1, sunoblecl, L] = sun_rectangular(day_number);
+    [x1, y1, z1, sunoblecl, L, lonsun, rs] = sun_rectangular(day_number);
     xgeoc = x1 + xeclip;
     ygeoc = y1 + yeclip;
     zgeoc = z1 + zeclip;

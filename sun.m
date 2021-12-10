@@ -1,6 +1,6 @@
-function [right_ascension, declination, distance, azimuth, altitude] = sun(day_number, latitude, longitude)
+function [right_ascension, declination, distance, azimuth, altitude] = sun(day_number, latitude, longitude, UT)
     % rotate equitorial coordinates
-    [x1, y1, z1, oblecl, L] = sun_rectangular(day_number);
+    [x1, y1, z1, oblecl, L, lon, r] = sun_rectangular(day_number);
     xequat = x1;
     yequat = y1 * cosd(oblecl) - z1 * sind(oblecl);
     zequat = y1 * sind(oblecl) - z1 * cosd(oblecl);
@@ -13,7 +13,7 @@ function [right_ascension, declination, distance, azimuth, altitude] = sun(day_n
     distance = sqrt(xequat^2 + yequat^2 + zequat^2);
     
     % calculate hour angle
-    hour_angle = (sidtime(day_number, longitude) - right_ascension) * 15;
+    hour_angle = (sidtime(day_number, longitude, UT) - right_ascension) * 15;
 
     % convert hour_angle and declination to rectangular system
     x2 = cosd(hour_angle) * cosd(declination);

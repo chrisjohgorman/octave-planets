@@ -1,4 +1,4 @@
-function [x1, y1, z1, oblecl, L] = sun_rectangular(day_number)
+function [x1, y1, z1, oblecl, L, lon, r] = sun_rectangular(day_number)
     w = 282.9404 + 4.70935e-5 * day_number;   % longitude of perihelion
     a = 1;                                    % mean distance, a.u.
     e = 0.016709 - 1.151e-9 * day_number;     % eccentricity
