@@ -49,7 +49,7 @@ function [right_ascension, declination, distance, azimuth, altitude] = uranus(da
     lon = perturbations_in_longitude + lon;
     lon = revolve_degree(lon);
     % convert to azimuth and altitude
-    hour_angle = sidtime(day_number, longitude) - right_ascension;
+    hour_angle = sidtime(day_number, longitude, 0) - right_ascension;
     hour_angle = revolve_hour_angle(hour_angle);
     hour_angle = hour_angle * 15;
     x = cosd(hour_angle)*cosd(declination);

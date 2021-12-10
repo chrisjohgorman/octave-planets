@@ -55,7 +55,7 @@ function [right_ascension, declination, distance, azimuth, altitude] = saturn(da
     lat = lat + perturbations_in_latitude;
     lat = revolve_degree(lat);
     % convert to azimuth and altitude
-    hour_angle = sidtime(day_number, longitude) - right_ascension;
+    hour_angle = sidtime(day_number, longitude, 0) - right_ascension;
     hour_angle = revolve_hour_angle(hour_angle);
     hour_angle = hour_angle * 15;
     x = cosd(hour_angle)*cosd(declination);

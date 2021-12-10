@@ -19,9 +19,6 @@ function [right_ascension, declination, distance, azimuth, altitude] = mercury(d
     xeclip = r * ( cosd(N) * cosd(v+w) - sind(N) * sind(v+w) * cosd(i));
     yeclip = r * ( sind(N) * cosd(v+w) + cosd(N) * sind(v+w) * cosd(i));
     zeclip = r * sind(v+w) * sind(i);
-    %convert to spherical coordinates
-    lonecl = atan2d( yeclip, xeclip );
-    latecl = atan2d( zeclip, sqrt(xeclip^2+yeclip^2) );
 
     % add sun's rectangular coordinates
     [x1, y1, z1, sunoblecl, L, lonsun, rs] = sun_rectangular(day_number);

@@ -39,7 +39,7 @@ function [right_ascension, declination, distance, azimuth, altitude] = neptune(d
     lon = revolve_degree(lon);
     lat = atan2d(zeclip, sqrt(xeclip*xeclip + yeclip*yeclip));
     % convert to azimuth and altitude
-    hour_angle = sidtime(day_number, longitude) - right_ascension;
+    hour_angle = sidtime(day_number, longitude, 0) - right_ascension;
     hour_angle = revolve_hour_angle(hour_angle);
     hour_angle = hour_angle * 15;
     x = cosd(hour_angle)*cosd(declination);
