@@ -25,20 +25,7 @@ function [right_ascension, declination, distance, azimuth, altitude] = saturn(da
     yeclip = r * ( sind(N) * cosd(v+w) + cosd(N) * sind(v+w) * cosd(i));
     zeclip = r * sind(v+w) * sind(i);
     % add sun's rectangular coordinates
-    [x1, y1, z1, sunoblecl, L] = sun_rectangular(day_number);
-    xgeoc = x1 + xeclip;
-    ygeoc = y1 + yeclip;
-    zgeoc = z1 + zeclip;
-    % rotate the equitorial coordinates
-    xequat = xgeoc;
-    yequat = ygeoc * cosd(oblecl) - zgeoc * sind(oblecl);
-    zequat = ygeoc * sind(oblecl) + zgeoc * cosd(oblecl);
-    % convert to right_ascension and declination
-    right_ascension = atan2d(yequat, xequat);
-    right_ascension = revolve_degree(right_ascension);
-    right_ascension = right_ascension / 15;
-    declination = atan2d(zequat, sqrt(xequat*xequat + yequat*yequat));
-    distance = sqrt(xequat^2+yequat^2+zequat^2);
+    [x1, y1, z1, sunoblecl, L, lonsun, rs] = sun_rectangular(day_number);
     % convert to ecliptic longitude and latitude
     lon = atan2d(yeclip, xeclip);
     lon = revolve_degree(lon);
@@ -51,9 +38,30 @@ function [right_ascension, declination, distance, azimuth, altitude] = saturn(da
     perturbations_in_latitude = -0.020 * cosd(2*Mj - 4*Ms - 2) ...
                     +0.018 * sind(2*Mj - 6*Ms - 49);
     lon = lon + perturbations_in_longitude;
-    lon = revolve_degree(lon);
     lat = lat + perturbations_in_latitude;
-    lat = revolve_degree(lat);
+    % use lat and lon to produce new RA and Dec
+    xh = r * cosd(lon) * cosd(lat);
+    yh = r * sind(lon) * cosd(lat);
+    zh = r * sind(lat);
+    % convert sun's position
+    xs = rs * cosd(lonsun);
+    ys = rs * sind(lonsun);
+    % convert from heliocentric to geocentric
+    xg = xh + xs;
+    yg = yh + ys;
+    zg = zh;
+    % convert to equitorial
+    xe = xg;
+    ye = yg * cosd(oblecl) - zg * sind(oblecl);
+    ze = yg * sind(oblecl) + zg * cosd(oblecl);
+    % RA and Decl
+    RA = atan2d(ye, xe);
+    Dec = atan2d(ze, sqrt(xe*xe+ye*ye));
+    rg = sqrt(xe*xe+ye*ye+ze*ze);
+    % convert to azimuth and altitude
+    right_ascension = revolve_hour_angle(RA/15);
+    declination = Dec;
+    distance = rg;
     % convert to azimuth and altitude
     hour_angle = sidtime(day_number, longitude, UT) - right_ascension;
     hour_angle = revolve_hour_angle(hour_angle);
