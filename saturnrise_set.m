@@ -1,8 +1,8 @@
-function [saturnrise, saturnset] = saturnrise_set (year, month, day, latitude, longitude)
+function [saturnrise, saturnset] = saturnrise_set (year, month, day, hour, latitude, longitude)
     h = -0.833;
     d = day_number(year, month, day);
     [x1, y1, z1, oblecl, L] = sun_rectangular(d);
-    [RA, Decl, r, az, alt] = saturn(d, latitude, longitude);
+    [RA, Decl, r, az, alt] = saturn(d, latitude, longitude, hour);
     GMST0 = (L + 180) / 15;
     UT_Planet_in_south = RA - (L+180)/15 - longitude/15.0;
     UT_Planet_in_south = revolve_hour_angle(UT_Planet_in_south);
