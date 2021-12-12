@@ -1,4 +1,4 @@
-function [right_ascension, declination, distance, azimuth, altitude] = jupiter(day_number, latitude, longitude, UT)
+function [RA, Dec, rg, azimuth, altitude] = jupiter(day_number, latitude, longitude, UT)
     N = 100.4542 + 2.76854e-5   * day_number;  % Long of asc. node
     i =   1.3030 - 1.557e-7     * day_number;  % Inclination
     w = 273.8777 + 1.64505e-5   * day_number;  % Argument of perihelion
@@ -55,21 +55,20 @@ function [right_ascension, declination, distance, azimuth, altitude] = jupiter(d
     ze = yg * sind(oblecl) + zg * cosd(oblecl);
     % RA and Decl
     RA = atan2d(ye, xe);
+    RA = revolve_degree(RA);
+    RA = RA/15;
     Dec = atan2d(ze, sqrt(xe*xe+ye*ye));
     rg = sqrt(xe*xe+ye*ye+ze*ze);
     % convert to azimuth and altitude
-    right_ascension = RA/15;
-    declination = Dec;
-    distance = rg;
-    hour_angle = sidtime(day_number, longitude, UT) - right_ascension;
-    hour_angle = revolve_hour_angle(hour_angle);
-    hour_angle = hour_angle * 15;
-    x = cosd(hour_angle)*cosd(declination);
-    y = sind(hour_angle)*cosd(declination);
-    z = sind(declination);
-    x_horizon = x * sind(latitude) - z * cosd(latitude);
-    y_horizon = y;
-    z_horizon = x * cosd(latitude) + z * sind(latitude);
-    azimuth = atan2d(y_horizon,x_horizon) + 180;
-    altitude = atan2d(z_horizon, sqrt(x_horizon^2 + y_horizon^2));
+    HA = sidtime(day_number, longitude, UT) - RA;
+    HA = revolve_hour_angle(HA);
+    HA = HA * 15;
+    x = cosd(HA)*cosd(Dec);
+    y = sind(HA)*cosd(Dec);
+    z = sind(Dec);
+    xhor = x * sind(latitude) - z * cosd(latitude);
+    yhor = y;
+    zhor = x * cosd(latitude) + z * sind(latitude);
+    azimuth = atan2d(yhor,xhor) + 180;
+    altitude = atan2d(zhor, sqrt(xhor^2 + yhor^2));
 end
