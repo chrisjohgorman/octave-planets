@@ -24,7 +24,7 @@ function [right_ascension, declination, distance, azimuth, altitude] = jupiter(d
     xeclip = r * ( cosd(N) * cosd(v+w) - sind(N) * sind(v+w) * cosd(i));
     yeclip = r * ( sind(N) * cosd(v+w) + cosd(N) * sind(v+w) * cosd(i));
     zeclip = r * sind(v+w) * sind(i);
-    % add sun's rectangular coordinates
+    % sun's rectangular coordinates
     [x1, y1, z1, sunoblecl, L, lonsun, rs] = sun_rectangular(day_number);
     % convert to ecliptic longitude and latitude
     lon = atan2d(yeclip, xeclip);
