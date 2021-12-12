@@ -1,4 +1,4 @@
-function [right_ascension, declination, distance, azimuth, altitude] = uranus(day_number, latitude, longitude, UT)
+function [RA, Dec, rg, azimuth, altitude] = uranus(day_number, latitude, longitude, UT)
     N =  74.0005 + 1.3978E-5    * day_number;  % Long of asc. node
     i =   0.7733 + 1.9E-8       * day_number;  % Inclination
     w =  96.6612 + 3.0565E-5    * day_number;  % Argument of perihelion
@@ -24,21 +24,8 @@ function [right_ascension, declination, distance, azimuth, altitude] = uranus(da
     xeclip = r * ( cosd(N) * cosd(v+w) - sind(N) * sind(v+w) * cosd(i));
     yeclip = r * ( sind(N) * cosd(v+w) + cosd(N) * sind(v+w) * cosd(i));
     zeclip = r * sind(v+w) * sind(i);
-    % add sun's rectangular coordinates
+    % sun's rectangular coordinates
     [x1, y1, z1, sunoblecl, L, lonsun, rs] = sun_rectangular(day_number);
-    xgeoc = x1 + xeclip;
-    ygeoc = y1 + yeclip;
-    zgeoc = z1 + zeclip;
-    % rotate the equitorial coordinates
-    xequat = xgeoc;
-    yequat = ygeoc * cosd(oblecl) - zgeoc * sind(oblecl);
-    zequat = ygeoc * sind(oblecl) + zgeoc * cosd(oblecl);
-    % convert to right_ascension and declination
-    right_ascension = atan2d(yequat, xequat);
-    right_ascension = revolve_degree(right_ascension);
-    right_ascension = right_ascension / 15;
-    declination = atan2d(zequat, sqrt(xequat^2 + yequat^2));
-    distance = sqrt(xequat^2+yequat^2+zequat^2);
     % convert to ecliptic longitude and latitude
     lon = atan2d(yeclip, xeclip);
     lon = revolve_degree(lon);
@@ -48,16 +35,37 @@ function [right_ascension, declination, distance, azimuth, altitude] = uranus(da
                         -0.015 * sind(Mj - Mu + 20);
     lon = perturbations_in_longitude + lon;
     lon = revolve_degree(lon);
+    % use lat and lon to produce new RA and Dec
+    xh = r * cosd(lon) * cosd(lat);
+    yh = r * sind(lon) * cosd(lat);
+    zh = r * sind(lat);
+    % convert sun's position
+    xs = rs * cosd(lonsun);
+    ys = rs * sind(lonsun);
+    % convert from heliocentric to geocentric
+    xg = xh + xs;
+    yg = yh + ys;
+    zg = zh;
+    % convert to equitorial
+    xe = xg;
+    ye = yg * cosd(oblecl) - zg * sind(oblecl);
+    ze = yg * sind(oblecl) + zg * cosd(oblecl);
+    % RA and Decl
+    RA = atan2d(ye, xe);
+    RA = revolve_degree(RA);
+    RA = RA/15;
+    Dec = atan2d(ze, sqrt(xe*xe+ye*ye));
+    rg = sqrt(xe*xe+ye*ye+ze*ze);
     % convert to azimuth and altitude
-    hour_angle = sidtime(day_number, longitude, UT) - right_ascension;
-    hour_angle = revolve_hour_angle(hour_angle);
-    hour_angle = hour_angle * 15;
-    x = cosd(hour_angle)*cosd(declination);
-    y = sind(hour_angle)*cosd(declination);
-    z = sind(declination);
-    x_horizon = x * sind(latitude) - z * cosd(latitude);
-    y_horizon = y;
-    z_horizon = x * cosd(latitude) + z * sind(latitude);
-    azimuth = atan2d(y_horizon,x_horizon) + 180;
-    altitude = atan2d(z_horizon, sqrt(x_horizon^2 + y_horizon^2));
+    HA = sidtime(day_number, longitude, UT) - RA;
+    HA = revolve_hour_angle(HA);
+    HA = HA * 15;
+    x = cosd(HA)*cosd(Dec);
+    y = sind(HA)*cosd(Dec);
+    z = sind(Dec);
+    xhor = x * sind(latitude) - z * cosd(latitude);
+    yhor = y;
+    zhor = x * cosd(latitude) + z * sind(latitude);
+    azimuth = atan2d(yhor,xhor) + 180;
+    altitude = atan2d(zhor, sqrt(xhor^2 + yhor^2));
 end
