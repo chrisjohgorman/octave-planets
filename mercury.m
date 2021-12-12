@@ -41,6 +41,7 @@ function [RA, Dec, rg, azimuth, altitude] = mercury(day_number, latitude, longit
     ze = yg * sind(oblecl) + zg * cosd(oblecl);
     % RA and Decl
     RA = atan2d(ye, xe);
+    RA = revolve_degree(RA);
     RA = RA/15;
     Dec = atan2d(ze, sqrt(xe*xe+ye*ye));
     rg = sqrt(xe*xe+ye*ye+ze*ze);
