@@ -47,8 +47,8 @@ function [RA, Dec, rg, azimuth, altitude] = mercury(day_number, latitude, longit
     rg = sqrt(xe*xe+ye*ye+ze*ze);
     % convert to azimuth and altitude
     HA = sidtime(day_number, longitude, UT) - RA;
-    HA = revolve_hour_angle(HA);
     HA = HA * 15;
+    HA = revolve_degree(HA);
     x = cosd(HA)*cosd(Dec);
     y = sind(HA)*cosd(Dec);
     z = sind(Dec);
