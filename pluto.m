@@ -1,4 +1,4 @@
-function [right_ascension, declination, distance, azimuth, altitude] = pluto(day_number, latitude, longitude, UT)
+function [RA, Dec, rg, azimuth, altitude] = pluto(day_number, latitude, longitude, UT)
     S  =   50.03  +  0.033459652 * day_number;
     P  =  238.95  +  0.003968789 * day_number;
     lonecl = 238.9508  +  0.00400703 * day_number ...
@@ -26,7 +26,7 @@ function [right_ascension, declination, distance, azimuth, altitude] = pluto(day
     yh = r * sind(lonecl) * cosd(latecl);
     zh = r               * sind(latecl);
 
-    [xs, ys, zs, oblecl, L] = sun_rectangular(day_number); 
+    [xs, ys, zs, oblecl, L, lonsun, rs] = sun_rectangular(day_number); 
 
     xg = xh + xs;
     yg = yh + ys;
@@ -36,22 +36,22 @@ function [right_ascension, declination, distance, azimuth, altitude] = pluto(day
     ye = yg * cosd(oblecl) - zg * sind(oblecl);
     ze = yg * sind(oblecl) + zg * cosd(oblecl);
 
-    right_ascension  = atan2d( ye, xe );
-    right_ascension  = revolve_degree(right_ascension);
-    right_ascension = right_ascension/15; 
-    declination = atan2d( ze, sqrt(xe*xe+ye*ye) );
-    distance = sqrt(xe*xe+ye*ye+ze*ze);
+    RA  = atan2d( ye, xe );
+    RA  = revolve_degree(RA);
+    RA = RA/15; 
+    Dec = atan2d( ze, sqrt(xe*xe+ye*ye) );
+    rg = sqrt(xe*xe+ye*ye+ze*ze);
 
     % convert to azimuth and altitude
-    hour_angle = sidtime(day_number, longitude, UT) - right_ascension;
-    hour_angle = revolve_hour_angle(hour_angle);
-    hour_angle = hour_angle * 15;
-    x = cosd(hour_angle)*cosd(declination);
-    y = sind(hour_angle)*cosd(declination);
-    z = sind(declination);
-    x_horizon = x * sind(latitude) - z * cosd(latitude);
-    y_horizon = y;
-    z_horizon = x * cosd(latitude) + z * sind(latitude);
-    azimuth = atan2d(y_horizon,x_horizon) + 180;
-    altitude = atan2d(z_horizon, sqrt(x_horizon^2 + y_horizon^2));
+    HA = sidtime(day_number, longitude, UT) - RA;
+    HA = HA * 15;
+    HA = revolve_degree(HA);
+    x = cosd(HA)*cosd(Dec);
+    y = sind(HA)*cosd(Dec);
+    z = sind(Dec);
+    xhor = x * sind(latitude) - z * cosd(latitude);
+    yhor = y;
+    zhor = x * cosd(latitude) + z * sind(latitude);
+    azimuth = atan2d(yhor,xhor) + 180;
+    altitude = atan2d(zhor, sqrt(xhor^2 + yhor^2));
 end
