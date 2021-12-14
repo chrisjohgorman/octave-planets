@@ -1,4 +1,4 @@
-function [topocentric_right_ascension, topocentric_declination, distance, azimuth, altitude] =  moon(day_number, latitude, longitude, UT)
+function [tRA, tDec, r, azimuth, altitude] =  moon(day_number, latitude, longitude, UT)
     N = 125.1228 - 0.0529538083 * day_number;  % long asc. node
     i = 5.1454;                % inclination
     w = 318.0634 + 0.1643573223 * day_number;  % Arg. of perigree
@@ -12,12 +12,12 @@ function [topocentric_right_ascension, topocentric_declination, distance, azimut
     x = a * (cosd(E) - e);
     y = a * sind(E) * sqrt(1 - e*e);
     % convert to distance and true anomaly
-    distance = sqrt(x*x + y*y);
+    r = sqrt(x*x + y*y);
     v = atan2d(y, x);
     % moon's position in ecliptic coordinates
-    xeclip = distance * ( cosd(N) * cosd(v+w) - sind(N) * sind(v+w) * cosd(i));
-    yeclip = distance * ( sind(N) * cosd(v+w) + cosd(N) * sind(v+w) * cosd(i));
-    zeclip = distance * sind(v+w) * sind(i);
+    xeclip = r * ( cosd(N) * cosd(v+w) - sind(N) * sind(v+w) * cosd(i));
+    yeclip = r * ( sind(N) * cosd(v+w) + cosd(N) * sind(v+w) * cosd(i));
+    zeclip = r * sind(v+w) * sind(i);
     % convert to ecliptic longitude, latitude and distance
     lon = atan2d(yeclip, xeclip);
     lon = revolve_degree(lon);
@@ -54,33 +54,33 @@ function [topocentric_right_ascension, topocentric_declination, distance, azimut
                         -0.46 * cosd(2*D);
     lon = lon + perturbations_in_longitude;
     lat = lat + perturbations_in_latitude;
-    distance = distance + perturbations_in_distance;
+    r = r + perturbations_in_distance;
     x1 = cosd(lon)*cosd(lat);
     y1 = cosd(lat)*sind(lon);
     z1 = sind(lat);
     x2 = x1;
     y2 = y1 * cosd(oblecl) - z1 * sind(oblecl);
     z2 = y1 * sind(oblecl) + z1 * cosd(oblecl);
-    right_ascension = atan2d(y2,x2);
-    right_ascension = revolve_degree(right_ascension);
-    declination = atan2d(z2, sqrt(x2*x2 + y2*y2));
-    hour_angle = (sidtime(day_number, longitude, UT)-right_ascension / 15) *15 ;
-    hour_angle = revolve_degree(hour_angle);
-    x = cosd(hour_angle) * cosd(declination);
-    y = sind(hour_angle) * cosd(declination);
-    z = sind(declination);
+    RA = atan2d(y2,x2);
+    RA = revolve_degree(RA);
+    Dec = atan2d(z2, sqrt(x2*x2 + y2*y2));
+    HA = (sidtime(day_number, longitude, UT)-RA / 15) *15 ;
+    HA = revolve_degree(HA);
+    x = cosd(HA) * cosd(Dec);
+    y = sind(HA) * cosd(Dec);
+    z = sind(Dec);
     xhor = x * sind(latitude) - z * cosd(latitude);
     yhor = y;
     zhor = x * cosd(latitude) + z * sind(latitude);
     azimuth  = atan2d( yhor, xhor ) + 180;
     altitude = atan2d( zhor , sqrt(xhor^2 + yhor^2));
-    mpar = asind(1/distance);
+    mpar = asind(1/r);
     gclat = latitude - 0.1924 * sind(2*latitude);
     rho   = 0.99833 + 0.00167 * cosd(2*latitude);
-    g = atand(tand(gclat) / cosd(hour_angle));
-    topocentric_right_ascension   = right_ascension ... 
-        - mpar * rho * cosd(gclat) * sind(hour_angle) / cosd(declination);
-    topocentric_right_ascension = revolve_degree(topocentric_right_ascension);
-    topocentric_declination = declination ...
-        - mpar * rho * sind(gclat) * sind(g - declination) / sind(g);
+    g = atand(tand(gclat) / cosd(HA));
+    tRA   = RA ... 
+        - mpar * rho * cosd(gclat) * sind(HA) / cosd(Dec);
+    tRA = revolve_degree(tRA);
+    tDec = Dec ...
+        - mpar * rho * sind(gclat) * sind(g - Dec) / sind(g);
 end
