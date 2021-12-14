@@ -62,11 +62,9 @@ function [topocentric_right_ascension, topocentric_declination, distance, azimut
     y2 = y1 * cosd(oblecl) - z1 * sind(oblecl);
     z2 = y1 * sind(oblecl) + z1 * cosd(oblecl);
     right_ascension = atan2d(y2,x2);
-    right_ascension1 = right_ascension;
     right_ascension = revolve_degree(right_ascension);
-    right_ascension = right_ascension / 15;
     declination = atan2d(z2, sqrt(x2*x2 + y2*y2));
-    hour_angle = (sidtime(day_number, longitude, UT) - right_ascension) * 15;
+    hour_angle = (sidtime(day_number, longitude, UT)-right_ascension / 15) *15 ;
     hour_angle = revolve_degree(hour_angle);
     x = cosd(hour_angle) * cosd(declination);
     y = sind(hour_angle) * cosd(declination);
@@ -80,7 +78,7 @@ function [topocentric_right_ascension, topocentric_declination, distance, azimut
     gclat = latitude - 0.1924 * sind(2*latitude);
     rho   = 0.99833 + 0.00167 * cosd(2*latitude);
     g = atand(tand(gclat) / cosd(hour_angle));
-    topocentric_right_ascension   = right_ascension1 ... 
+    topocentric_right_ascension   = right_ascension ... 
         - mpar * rho * cosd(gclat) * sind(hour_angle) / cosd(declination);
     topocentric_right_ascension = revolve_degree(topocentric_right_ascension);
     topocentric_declination = declination ...
