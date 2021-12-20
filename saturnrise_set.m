@@ -1,6 +1,6 @@
 function [saturnrise, saturnset] = saturnrise_set (year, month, day, hour, latitude, longitude)
     h = -0.833;
-    d = day_number(year, month, day);
+    d = day_number(year, month, day, hour);
     [x1, y1, z1, oblecl, L] = sun_rectangular(d);
     [RA, Decl, r, az, alt] = saturn(d, latitude, longitude, hour);
     GMST0 = (L + 180) / 15;

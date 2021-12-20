@@ -12,7 +12,7 @@ function [sunrise, sunset] = sunrise_set (year, month, day, hour, latitude, long
 % h = -18 degrees: Astronomical twilight (the sky is completely dark)
 %
     h = -0.833;
-    d = day_number(year, month, day);
+    d = day_number(year, month, day, hour/24);
     [x1, y1, z1, oblecl, L] = sun_rectangular(d);
     [RA, Decl, r, az, alt] = sun(d, latitude, longitude, hour);
     GMST0 = (L + 180) / 15;
