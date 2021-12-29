@@ -1,4 +1,4 @@
-function [tRA, tDec, r, azimuth, altitude] =  moon(day_number, latitude, longitude, UT)
+function [tRA, tDec, r, azimuth, alt_topoc] =  moon(day_number, latitude, longitude, UT)
     N = 125.1228 - 0.0529538083 * day_number;  % long asc. node
     i = 5.1454;                % inclination
     w = 318.0634 + 0.1643573223 * day_number;  % Arg. of perigree
@@ -75,6 +75,7 @@ function [tRA, tDec, r, azimuth, altitude] =  moon(day_number, latitude, longitu
     azimuth  = atan2d( yhor, xhor ) + 180;
     altitude = atan2d( zhor , sqrt(xhor^2 + yhor^2));
     mpar = asind(1/r);
+    alt_topoc = altitude - mpar * cosd(altitude);
     gclat = latitude - 0.1924 * sind(2*latitude);
     rho   = 0.99833 + 0.00167 * cosd(2*latitude);
     g = atand(tand(gclat) / cosd(HA));
